@@ -8,7 +8,6 @@ def create_graph_adjency_list(vertex_num, edges):
         graph[v2-1].append((v1-1,wage))
     return graph
 
-
 def find_articulation_points(vertex_num, graph):
 
     def DFS_low(vertex, parent, graph, visited, dv, points):
@@ -51,16 +50,35 @@ def find_articulation_points(vertex_num, graph):
     return points
 
 
-def find_biconnected_components():
-    components = {}
+def find_biconnected_components(vertex_num, graph, articulation_points):
 
+    def DFS(vertex, id):
+        visited[vertex] = True
+        components[vertex] = id
+        for neighbour in graph[vertex]:
+            if not visited[neighbour]:
+                DFS(neighbour, id)
+        return
+
+
+    components = {}
+    index = 0
+    visited = [True if i in articulation_points else False for i in range(vertex_num)]
+    for vertex in range(vertex_num):
+        if not visited[vertex]:
+            DFS(vertex, index)
+            index += 1
+    return components
+
+
+def modified_Dijkstra():
 
 
 def my_solve(N, streets):
     print(f"Place: {N}, ulice: {len(streets)}")
     graph = create_graph_adjency_list(N,streets)
     transit_squares = find_articulation_points(N, graph)
-
+    check_if_under_arch = find_biconnected_components(N, graph, transit_squares)
 
     return 0, 0
 
